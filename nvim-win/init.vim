@@ -21,7 +21,7 @@ nmap <leader>w :w!<cr>
 
 language en_US.utf8
 set nocompatible
-set number
+set number relativenumber
 set encoding=utf-8
 set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
 set fileformats=unix,dos,mac
