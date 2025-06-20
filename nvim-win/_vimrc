@@ -54,7 +54,7 @@ augroup indent_config
   autocmd!
   
   " 2-space indentation for Vue, HTML, and JavaScript
-  autocmd FileType vue,html,javascript setlocal shiftwidth=2 softtabstop=2 hardtabstop=2 expandtab
+  autocmd FileType vue,html,javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 
   " 4-space indentation for all other filetypes
   autocmd FileType * call s:SetIndent()
@@ -62,7 +62,7 @@ augroup END
 
 function! s:SetIndent()
   if index(['vue', 'html', 'javascript'], &filetype) < 0
-    setlocal shiftwidth=4 softtabstop=4 hardtabstop=4 expandtab
+    setlocal shiftwidth=4 softtabstop=4 tabstop=4 expandtab
   endif
 endfunction
 
@@ -140,8 +140,13 @@ Plug 'posva/vim-vue'
 " Initialize plugin system
 call plug#end()
 
-colorscheme gruvbox
+" Use truecolour
+if has('termguicolors')
+  set termguicolors
+endif
+set t_Co=256
 
+colorscheme gruvbox
 let g:airline_theme='simple'
 let g:airline_powerline_fonts = 1
 
