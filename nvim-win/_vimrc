@@ -1,6 +1,7 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 " Sets how many lines of history VIM has to remember
 set history=500
 
@@ -25,13 +26,12 @@ set number relativenumber
 set encoding=utf-8
 set fileencodings=iso-2022-jp,euc-jp,sjis,utf-8
 set fileformats=unix,dos,mac
-set termencoding=utf-8
 set background=dark
 set ruler
 set showcmd
 
 " Enable Windows clipboard copy/paste in INSERT mode
-source $VIMRUNTIME/mswin.vim
+" source $VIMRUNTIME/mswin.vim
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -45,15 +45,26 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
 
 " Be smart when using tabs ;)
 set smarttab
 
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
+" Set indentation rules
+augroup indent_config
+  autocmd!
+  
+  " 2-space indentation for Vue, HTML, and JavaScript
+  autocmd FileType vue,html,javascript setlocal shiftwidth=2 softtabstop=2 hardtabstop=2 expandtab
+
+  " 4-space indentation for all other filetypes
+  autocmd FileType * call s:SetIndent()
+augroup END
+
+function! s:SetIndent()
+  if index(['vue', 'html', 'javascript'], &filetype) < 0
+    setlocal shiftwidth=4 softtabstop=4 hardtabstop=4 expandtab
+  endif
+endfunction
 
 " Linebreak on 500 characters
 set lbr
@@ -103,8 +114,6 @@ let g:loaded_python_provider = 0
 " => VimPlug
 """"""""""""""""""""""""""""""
 call plug#begin('C:\Users\sheri\AppData\Local\nvim\plugged')
-" The default plugin directory will be as follows:
-"   - Neovim (Linux/macOS/Windows): stdpath('data') . '/plugged'
 " Make sure you use single quotes
 
 " The NERD tree
@@ -124,6 +133,9 @@ Plug 'bling/vim-airline'
 
 " Airline themes
 Plug 'vim-airline/vim-airline-themes'
+
+" Vue support
+Plug 'posva/vim-vue'
 
 " Initialize plugin system
 call plug#end()
