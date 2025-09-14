@@ -20,7 +20,7 @@ let mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
-language en_US.utf8
+language en_AU.UTF-8
 set nocompatible
 set number relativenumber
 set encoding=utf-8

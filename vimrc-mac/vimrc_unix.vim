@@ -20,6 +20,7 @@ let mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
+language en_AU.UTF-8
 set nocompatible
 set number relativenumber
 set encoding=utf-8
@@ -44,6 +45,8 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use spaces instead of tabs
+set expandtab
 
 " Be smart when using tabs ;)
 set smarttab
@@ -52,16 +55,16 @@ set smarttab
 augroup indent_config
   autocmd!
   
-  " 2-space indentation for Vue, HTML, and JavaScript
-  autocmd FileType vue,html,javascript setlocal shiftwidth=2 softtabstop=2 hardtabstop=2 expandtab
+  " 2-space indentation for Vue, HTML, JavaScript
+  autocmd FileType vue,html,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
-  " 4-space indentation for all other filetypes
-  autocmd FileType * call s:SetIndent()
+  " Set 4-space indentation for all other filetypes using a function
+  autocmd FileType * call SetDefaultIndent()
 augroup END
 
-function! s:SetIndent()
+function! SetDefaultIndent()
   if index(['vue', 'html', 'javascript'], &filetype) < 0
-    setlocal shiftwidth=4 softtabstop=4 hardtabstop=4 expandtab
+    setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
   endif
 endfunction
 
@@ -112,7 +115,7 @@ let g:loaded_python_provider = 0
 """"""""""""""""""""""""""""""
 " => VimPlug
 """"""""""""""""""""""""""""""
-call plug#begin('C:\Users\sheri\AppData\Local\nvim\plugged')
+call plug#begin('~/.vim/plugged')
 " Make sure you use single quotes
 
 " The NERD tree
