@@ -45,28 +45,19 @@ set noswapfile
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
 
-" Be smart when using tabs ;)
 set smarttab
 
-" Set indentation rules
+" Default indent
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+set expandtab
+
 augroup indent_config
   autocmd!
-  
-  " 2-space indentation for Vue, HTML, JavaScript
   autocmd FileType vue,html,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
-
-  " Set 4-space indentation for all other filetypes using a function
-  autocmd FileType * call SetDefaultIndent()
 augroup END
-
-function! SetDefaultIndent()
-  if index(['vue', 'html', 'javascript'], &filetype) < 0
-    setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-  endif
-endfunction
 
 " Linebreak on 500 characters
 set lbr
@@ -100,23 +91,11 @@ map <C-l> <C-W>l
 " Always show the status line
 set laststatus=2
 
-" Format the status line
-" set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-
-""""""""""""""""""""""""""""""
-" => Python Provider
-""""""""""""""""""""""""""""""
-" Python3 Provider
-let g:python3_host_prog = 'C:\Users\sheri\.pyenv\pyenv-win\versions\3.10.11\python.exe'
-
-" Disable Python2 Provider
-let g:loaded_python_provider = 0
 
 """"""""""""""""""""""""""""""
 " => VimPlug
 """"""""""""""""""""""""""""""
 call plug#begin('~/.vim/plugged')
-" Make sure you use single quotes
 
 " The NERD tree
 Plug 'scrooloose/nerdtree'
@@ -131,7 +110,7 @@ Plug 'mattn/emmet-vim'
 Plug 'morhetz/gruvbox'
 
 " Airline
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline' 
 
 " Airline themes
 Plug 'vim-airline/vim-airline-themes'
@@ -139,7 +118,12 @@ Plug 'vim-airline/vim-airline-themes'
 " Vue support
 Plug 'posva/vim-vue'
 
-" Initialize plugin system
+" Blade support
+Plug 'jwalton512/vim-blade'
+
+" fzf
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
 call plug#end()
 
 colorscheme gruvbox
