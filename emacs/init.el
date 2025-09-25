@@ -1,68 +1,69 @@
-;; Code:
-;; (setq inhibit-startup-message t)
+;; Disable native compilation on macOS 
+(setq native-comp-deferred-compilation nil)
+(setq comp-deferred-compilation nil)
+(setq native-comp-jit-compilation nil)
+(setq native-comp-async-report-warnings-errors nil)
 
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
-(menu-bar-mode -1)            ; Disable the menu bar
+;; Disable UI clutter
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(set-fringe-mode 10)
+(menu-bar-mode -1)
 
-;; Set up the visible bell
+;; Visible bell
 (setq visible-bell t)
 
-(setq make-backup-files nil)  ; disable emacs automatic backup~ file
-(setq create-lockfiles nil)   ; disable lock files
+;; Disable backups & lockfiles
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
 
+;; Line/column numbers
 (column-number-mode)
 (global-display-line-numbers-mode t)
-
-;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
                 term-mode-hook
                 shell-mode-hook
                 eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(set-face-attribute 'default nil :font "SauceCodePro NFM-11")
-(load-theme 'gruvbox t)
+;; Font
+(set-face-attribute 'default nil :family "SauceCodePro NFM" :height 160)
+;; height 160 ≈ 16pt, adjust to your liking
 
-;; Set up Melpa
+;; Package setup
 (require 'package)
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(package-initialize)
+(setq package-archives
+      '(("gnu"   . "https://elpa.gnu.org/packages/")
+        ("melpa" . "https://melpa.org/packages/")))
 
-;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; Theme
+(use-package gruvbox-theme
+  :ensure t
+  :config (load-theme 'gruvbox t))
+
 ;; Org mode
-(require 'org)
+(use-package org)
 
-;; Evil mode
-(require 'evil)
-(evil-mode 1)
+;; Flycheck + js2-mode
+(use-package flycheck
+  :hook (after-init . global-flycheck-mode))
 
-;; flycheck and js2-mode for JavaScript
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-hook 'js2-mode-hook
-          (lambda ()
-             (setq my-js-mode-indent-num 2)
-             (setq js2-basic-offset my-js-mode-indent-num)
-             (setq js-switch-indent-offset my-js-mode-indent-num)
-            ))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages '(flycheck js2-mode gruvbox-theme evil)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(use-package js2-mode
+  :mode "\\.js\\'"
+  :hook (js2-mode . (lambda ()
+                      (setq js2-basic-offset 2))))
+
+;; Optional:  Evil mode
+;; (use-package evil
+;;   :config (evil-mode 1))
+
+;; End of init
+
